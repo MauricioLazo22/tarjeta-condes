@@ -18,6 +18,12 @@ export const metadata: Metadata = {
   // Título: usa seoTitle si está definido, sino genera automáticamente
   title: profile.seoTitle || `${profile.name} — ${profile.position}`,
 
+  // ── Favicon ───────────────────────────────────────────────────────────────
+  icons: {
+    icon: "/icono.png",
+    apple: "/icono.png",
+  },
+
   // Descripción: usa seoDescription si está definido, sino usa description
   description: profile.seoDescription || profile.description,
 
