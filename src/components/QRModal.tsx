@@ -64,22 +64,33 @@ export default function QRModal({ name }: QRModalProps) {
   }
 
   // ── Compartir / copiar URL ────────────────────────────────────────────────
-  async function handleShare(e: React.MouseEvent<HTMLButtonElement>) {
+  function showCopied(btn: HTMLButtonElement, span: Element | null) {
+    if (!span) return;
+    span.textContent = "¡Copiado!";
+    btn.style.backgroundColor = "#22c55e";
+    btn.style.color = "#ffffff";
+    setTimeout(() => {
+      span.textContent = "Compartir";
+      btn.style.removeProperty("background-color");
+      btn.style.removeProperty("color");
+    }, 2000);
+  }
+
+  function handleShare(e: React.MouseEvent<HTMLButtonElement>) {
     const btn  = e.currentTarget;
     const span = btn.querySelector("span");
     const url  = window.location.href;
 
+    // navigator.share debe llamarse sincrónicamente dentro del gesto del usuario
     if (typeof navigator !== "undefined" && navigator.share) {
-      try {
-        await navigator.share({ title: name, text: "Tarjeta digital", url });
-        return;
-      } catch { /* usuario canceló */ }
+      navigator.share({ title: name, text: "Tarjeta digital", url }).catch(() => {});
+      return;
     }
 
-    // Fallback: copiar URL al portapapeles
-    try {
-      await navigator.clipboard.writeText(url);
-    } catch {
+    // Fallback: copiar al portapapeles
+    if (navigator.clipboard?.writeText) {
+      navigator.clipboard.writeText(url).then(() => showCopied(btn, span)).catch(() => {});
+    } else {
       const el = document.createElement("textarea");
       el.value = url;
       el.style.cssText = "position:fixed;top:0;left:0;width:1px;height:1px;opacity:.01";
@@ -87,18 +98,7 @@ export default function QRModal({ name }: QRModalProps) {
       el.focus(); el.select();
       try { document.execCommand("copy"); } catch {}
       document.body.removeChild(el);
-    }
-
-    // Feedback visual
-    if (span) {
-      span.textContent = "¡Copiado!";
-      btn.style.backgroundColor = "#22c55e";
-      btn.style.color = "#ffffff";
-      setTimeout(() => {
-        span.textContent = "Compartir";
-        btn.style.removeProperty("background-color");
-        btn.style.removeProperty("color");
-      }, 2000);
+      showCopied(btn, span);
     }
   }
 
@@ -179,6 +179,7 @@ export default function QRModal({ name }: QRModalProps) {
             <button
               type="button"
               onClick={handleDownload}
+              style={{ touchAction: "manipulation" }}
               className="tap-highlight-none flex-1 flex items-center justify-center gap-2
                 rounded-2xl py-3.5 text-sm font-semibold
                 bg-slate-800 text-white
@@ -191,6 +192,7 @@ export default function QRModal({ name }: QRModalProps) {
             <button
               type="button"
               onClick={handleShare}
+              style={{ touchAction: "manipulation" }}
               className="tap-highlight-none flex-1 flex items-center justify-center gap-2
                 rounded-2xl py-3.5 text-sm font-semibold
                 bg-slate-100 text-slate-700
