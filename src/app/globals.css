@@ -1,0 +1,138 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ─── Reset mínimo ──────────────────────────────────────────────────────────── */
+*,
+*::before,
+*::after { box-sizing: border-box; }
+
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  min-height: 100dvh;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  /* Fallback si la imagen tarda en cargar */
+  background-color: #1e3040;
+}
+
+/* ─── Animaciones de entrada ────────────────────────────────────────────────── */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes scaleIn {
+  from { opacity: 0; transform: scale(0.94); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+.animate-fade-in-up { animation: fadeInUp 0.45s ease-out forwards; opacity: 0; }
+.animate-scale-in   { animation: scaleIn  0.4s  ease-out forwards; opacity: 0; }
+.animate-fade-in    { animation: fadeIn   0.35s ease-out forwards; opacity: 0; }
+
+.delay-100 { animation-delay: 80ms;  }
+.delay-200 { animation-delay: 160ms; }
+.delay-300 { animation-delay: 240ms; }
+.delay-400 { animation-delay: 320ms; }
+.delay-500 { animation-delay: 400ms; }
+
+/* ─── Utilidades ────────────────────────────────────────────────────────────── */
+@layer utilities {
+  .tap-highlight-none { -webkit-tap-highlight-color: transparent; }
+}
+
+/* ─── Botón copiar — 100% CSS, sin JavaScript ────────────────────────────────
+   :focus se activa en tap/click → animación 2s → vuelve al estado base.
+─────────────────────────────────────────────────────────────────────────────── */
+.copy-btn {
+  background-color: #f1f5f9;
+  color: #475569;
+}
+
+@keyframes copy-flash {
+  0%   { background-color: #22c55e; color: #ffffff; }
+  75%  { background-color: #22c55e; color: #ffffff; }
+  100% { background-color: #f1f5f9; color: #475569; }
+}
+
+.copy-btn:focus {
+  outline: none;
+  animation: copy-flash 2s ease forwards;
+}
+
+.copy-btn .icon-copy  { display: flex; }
+.copy-btn .icon-check { display: none;  }
+
+.copy-btn:focus .icon-copy  { display: none;  }
+.copy-btn:focus .icon-check { display: flex;  }
+
+.copy-btn .copy-label::before { content: "Copiar"; }
+.copy-btn:focus .copy-label::before { content: "Copiado"; }
+
+.btn-copied {
+  background-color: #22c55e !important;
+  color: #ffffff !important;
+}
+
+/* ─── Modal QR — apertura/cierre 100% CSS via :target ────────────────────────
+   Abre con <a href="#qr-modal">.
+   Cierra con <a href="#qr-close"> (ancla invisible al inicio de la página).
+─────────────────────────────────────────────────────────────────────────────── */
+.qr-modal-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  align-items: flex-end;
+  justify-content: center;
+}
+
+.qr-modal-overlay:target {
+  display: flex;
+}
+
+.qr-modal-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.72);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  display: block;
+  text-decoration: none;
+}
+
+.qr-modal-panel {
+  position: relative;
+  z-index: 10;
+  width: 100%;
+  max-width: 360px;
+  background: #ffffff;
+  border-radius: 24px 24px 0 0;
+  padding: 20px 20px 36px;
+  box-shadow: 0 -8px 40px rgba(0, 0, 0, 0.35);
+}
+
+@media (min-width: 480px) {
+  .qr-modal-overlay {
+    align-items: center;
+  }
+  .qr-modal-panel {
+    border-radius: 24px;
+    max-width: 340px;
+    margin: 16px;
+  }
+}
