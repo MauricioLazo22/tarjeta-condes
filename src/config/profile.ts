@@ -1,5 +1,5 @@
 /**
- * ╔══════════════════════════════════════════════════════════════════════════╗
+ * ╔══════════════════════════════════════════════════════════════════════════string╗
  * ║              ARCHIVO DE CONFIGURACIÓN — TARJETA DIGITAL                 ║
  * ║  Único archivo a editar para personalizar la tarjeta.                   ║
  * ║  Campos vacíos ("") ocultan el botón o sección correspondiente.         ║
@@ -53,7 +53,7 @@ export interface Profile {
 export const profile: Profile = {
   name:        "Renato Prado Cardenas",
   position:    "Gerente General",
-  company:     "Condes Corporación",
+  company:     "Condes Capital S.A.C.",
   description: "",
 
   phone:    "+51 968 798 597",
@@ -95,7 +95,7 @@ export const profile: Profile = {
     },
   ],
 
-  seoTitle:       "Renato Prado Cardenas — Gerente General | Condes Corporación",
-  seoDescription: "Tarjeta digital de Renato Prado Cardenas, Gerente General de Condes Corporación, Arequipa.",
+  seoTitle:       "Renato Prado Cardenas — Gerente General | Condes capital S.A.C.",
+  seoDescription: "Tarjeta digital de Renato Prado Cardenas, Gerente General de Condes Capital S.A.C., Arequipa.",
   siteUrl:        "https://condescorporacion.com",
 };
